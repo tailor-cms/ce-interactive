@@ -1,0 +1,54 @@
+{
+  "name": "@tailor-cms/ce-interactive-display",
+  "description": "Tailor CMS interactive element end-user component",
+  "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailor-cms/ce-interactive.git",
+    "directory": "packages/display"
+  },
+  "homepage": "https://github.com/tailor-cms/ce-interactive#readme",
+  "bugs": "https://github.com/tailor-cms/ce-interactive/issues",
+  "type": "module",
+  "version": "1.0.0",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "pnpm nuke:dist && vue-tsc && vite build",
+    "lint": "eslint ./src",
+    "lint:fix": "pnpm lint --fix",
+    "nuke": "pnpm dlx del-cli dist node_modules",
+    "nuke:dist": "pnpm dlx del-cli dist",
+    "prepublish": "pnpm build"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.29"
+  },
+  "devDependencies": {
+    "@tailor-cms/ce-interactive-manifest": "workspace:*",
+    "@tailor-cms/eslint-config": "2.1.1",
+    "@vitejs/plugin-vue": "^6.0.8",
+    "typescript": "^6.0.3",
+    "vite": "^8.2.1",
+    "vite-plugin-lib-inject-css": "^2.2.2",
+    "vue-tsc": "^3.3.9",
+    "vuetify": "^4.1.8"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=26"
+  }
+}

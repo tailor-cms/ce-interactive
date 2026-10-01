@@ -1,0 +1,36 @@
+{
+  "name": "@tailor-cms/ce-interactive",
+  "description": "Tailor CMS interactive element",
+  "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm boot:cek",
+    "boot:cek": "cd ./node_modules/@tailor-cms/tce-boot && pnpm start --default-display",
+    "build": "pnpm -r run build",
+    "lint": "pnpm -r run lint && eslint .",
+    "lint:fix": "pnpm -r run lint --fix && eslint . --fix",
+    "preview": "node --env-file-if-exists=.env preview/index.ts",
+    "nuke:dist": "pnpm -r run nuke:dist",
+    "nuke": "pnpm -r run nuke && pnpm dlx del-cli node_modules",
+    "test": "pnpm playwright test --config ./test/playwright.config.ts"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^3.0.0",
+    "@playwright/test": "^1.62.1",
+    "@tailor-cms/cek-e2e": "2.1.1",
+    "@tailor-cms/ce-interactive-manifest": "workspace:*",
+    "@tailor-cms/eslint-config": "2.1.1",
+    "@tailor-cms/tce-boot": "2.1.1",
+    "@types/node": "^26.2.0",
+    "dotenv": "^17.4.2",
+    "eslint": "^9.39.5",
+    "prettier": "^3.9.6",
+    "typescript": "^6.0.3"
+  },
+  "packageManager": "pnpm@11.17.0",
+  "engines": {
+    "node": ">=26"
+  }
+}

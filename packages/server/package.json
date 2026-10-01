@@ -1,0 +1,57 @@
+{
+  "name": "@tailor-cms/ce-interactive-server",
+  "description": "Tailor CMS interactive element server component",
+  "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailor-cms/ce-interactive.git",
+    "directory": "packages/server"
+  },
+  "homepage": "https://github.com/tailor-cms/ce-interactive#readme",
+  "bugs": "https://github.com/tailor-cms/ce-interactive/issues",
+  "type": "module",
+  "version": "1.0.0",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.mts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsdown --watch src --watch ../manifest/dist",
+    "build": "pnpm nuke:dist && tsdown",
+    "lint": "eslint .",
+    "lint:fix": "pnpm lint --fix",
+    "nuke": "pnpm dlx del-cli dist node_modules",
+    "nuke:dist": "pnpm dlx del-cli dist",
+    "prepublish": "pnpm build"
+  },
+  "dependencies": {
+    "@tailor-cms/ce-interactive-manifest": "workspace:*",
+    "@tailor-cms/cek-common": "2.1.1"
+  },
+  "devDependencies": {
+    "@tailor-cms/eslint-config": "2.1.1",
+    "tsdown": "^0.22.14",
+    "typescript": "^6.0.3"
+  },
+  "tsdown": {
+    "target": "node24",
+    "format": [
+      "cjs",
+      "esm"
+    ]
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=26"
+  }
+}

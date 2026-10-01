@@ -1,0 +1,10 @@
+packages:
+  - 'packages/*'
+
+allowBuilds:
+  '@parcel/watcher': false
+  esbuild: false
+  sqlite3: true
+
+minimumReleaseAgeExclude:
+  - '@tailor-cms/*'
