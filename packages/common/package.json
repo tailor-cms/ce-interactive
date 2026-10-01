@@ -1,12 +1,12 @@
 {
-  "name": "@tailor-cms/ce-interactive-manifest",
-  "description": "Tailor CMS interactive element manifest",
+  "name": "@tailor-cms/ce-interactive-common",
+  "description": "Tailor CMS interactive element shared utilities",
   "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tailor-cms/ce-interactive.git",
-    "directory": "packages/manifest"
+    "directory": "packages/common"
   },
   "homepage": "https://github.com/tailor-cms/ce-interactive#readme",
   "bugs": "https://github.com/tailor-cms/ce-interactive/issues",
@@ -32,17 +32,13 @@
     "nuke:dist": "pnpm dlx del-cli dist",
     "prepublish": "pnpm build"
   },
-  "dependencies": {
-    "@tailor-cms/cek-common": "2.1.1",
-    "@tailor-cms/ce-interactive-common": "workspace:*"
-  },
   "devDependencies": {
     "@tailor-cms/eslint-config": "2.1.1",
     "tsdown": "^0.22.14",
     "typescript": "^6.0.3"
   },
   "tsdown": {
-    "target": "node24",
+    "target": "es2020",
     "format": [
       "cjs",
       "esm"

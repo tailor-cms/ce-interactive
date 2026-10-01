@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wave interference</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #1e293b;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --ok: #4ade80;
+      --bad: #f87171;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 1.25rem;
+      background: var(--bg);
+      color: var(--text);
+      font: 15px/1.5 system-ui, sans-serif;
+    }
+
+    h1 { margin: 0 0 0.25rem; font-size: 1.25rem; }
+    p { margin: 0 0 1rem; color: var(--muted); }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 220px;
+      border-radius: 8px;
+      background: #020617;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      margin: 1rem 0;
+    }
+
+    label { display: flex; gap: 0.5rem; align-items: center; }
+    input[type="range"] { accent-color: var(--accent); }
+
+    button {
+      padding: 0.4rem 0.9rem;
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--accent);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    .panel {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      background: var(--panel);
+    }
+
+    .checks { margin: 0.5rem 0 0; padding: 0; list-style: none; }
+    .checks li { display: flex; justify-content: space-between; gap: 1rem; }
+    [data-result="isolated"] { color: var(--ok); }
+    [data-result="exposed"] { color: var(--bad); }
+
+    .details { margin-top: 1rem; }
+    .details[hidden] { display: none; }
+    .details .row { height: 60px; margin-top: 0.5rem; border-radius: 6px; background: var(--panel); }
+
+    @media (prefers-reduced-motion: reduce) {
+      canvas { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Wave interference</h1>
+  <p>Two point sources send out waves; where crests meet, the pattern is bright.</p>
+
+  <canvas id="waves" aria-label="Interference pattern of two waves"></canvas>
+
+  <div class="controls">
+    <label>
+      Wavelength
+      <input id="wavelength" type="range" min="8" max="40" value="18">
+      <output id="wavelength-value" for="wavelength">18</output>
+    </label>
+    <button id="toggle" type="button" aria-pressed="true">Pause</button>
+    <button id="details-toggle" type="button" aria-expanded="false">
+      Show details
+    </button>
+  </div>
+
+  <section class="panel" aria-labelledby="checks-title">
+    <strong id="checks-title">Sandbox checks</strong>
+    <ul id="checks" class="checks"></ul>
+  </section>
+
+  <section id="details" class="details" hidden>
+    <div class="row"></div>
+    <div class="row"></div>
+    <div class="row"></div>
+    <div class="row"></div>
+    <div class="row"></div>
+  </section>
+
+  <script>
+    const canvas = document.getElementById('waves');
+    const ctx = canvas.getContext('2d');
+    const wavelengthInput = document.getElementById('wavelength');
+    const wavelengthValue = document.getElementById('wavelength-value');
+    const toggle = document.getElementById('toggle');
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+
+    let isPlaying = !reducedMotion.matches;
+    let phase = 0;
+
+    function draw() {
+      const { width, height } = canvas;
+      const image = ctx.createImageData(width, height);
+      const wavelength = Number(wavelengthInput.value);
+      const sources = [
+        { x: width * 0.4, y: height / 2 },
+        { x: width * 0.6, y: height / 2 },
+      ];
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const sum = sources.reduce((acc, s) => {
+            const d = Math.hypot(x - s.x, y - s.y);
+            return acc + Math.sin((d / wavelength - phase) * 2 * Math.PI);
+          }, 0);
+          const i = (y * width + x) * 4;
+          const v = Math.round(((sum + 2) / 4) * 255);
+          image.data[i] = v * 0.22;
+          image.data[i + 1] = v * 0.74;
+          image.data[i + 2] = v * 0.97;
+          image.data[i + 3] = 255;
+        }
+      }
+      ctx.putImageData(image, 0, 0);
+    }
+
+    function resize() {
+      // Low internal resolution keeps the per-pixel loop cheap.
+      canvas.width = Math.max(160, Math.round(canvas.clientWidth / 3));
+      canvas.height = Math.round(canvas.width * (220 / canvas.clientWidth));
+      draw();
+    }
+
+    function tick() {
+      if (isPlaying) {
+        phase += 0.03;
+        draw();
+      }
+      requestAnimationFrame(tick);
+    }
+
+    wavelengthInput.addEventListener('input', () => {
+      wavelengthValue.textContent = wavelengthInput.value;
+      draw();
+    });
+
+    toggle.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      toggle.textContent = isPlaying ? 'Pause' : 'Play';
+      toggle.setAttribute('aria-pressed', String(isPlaying));
+    });
+
+    document.getElementById('details-toggle').addEventListener('click', (e) => {
+      const details = document.getElementById('details');
+      details.hidden = !details.hidden;
+      e.currentTarget.setAttribute('aria-expanded', String(!details.hidden));
+      e.currentTarget.textContent = details.hidden ? 'Show details' : 'Hide details';
+    });
+
+    new ResizeObserver(resize).observe(canvas);
+    requestAnimationFrame(tick);
+
+    // Each check tries to reach something outside the page. In the
+    // element's sandboxed frame every attempt must fail ("isolated").
+    const checks = {
+      origin: () => window.origin !== 'null',
+      'host-dom': () => {
+        window.parent.document.body.dataset.compromised = 'true';
+        return true;
+      },
+      'local-storage': () => {
+        localStorage.setItem('tce-interactive', 'probe');
+        return true;
+      },
+      cookies: () => {
+        document.cookie = 'tce-interactive=probe';
+        return true;
+      },
+      'indexed-db': () => {
+        indexedDB.open('tce-interactive');
+        return true;
+      },
+    };
+
+    // Inside a frame only; opened on its own the page has a real origin.
+    const isFramed = window.parent !== window;
+    const list = document.getElementById('checks');
+    for (const [name, attempt] of Object.entries(checks)) {
+      let isExposed;
+      try {
+        isExposed = attempt();
+      } catch {
+        isExposed = false;
+      }
+      const item = document.createElement('li');
+      const result = isExposed ? 'exposed' : 'isolated';
+      item.dataset.check = name;
+      item.dataset.result = isFramed ? result : 'skipped';
+      item.innerHTML = `<span>${name}</span><span>${isFramed ? result : 'not framed'}</span>`;
+      list.append(item);
+    }
+  </script>
+</body>
+</html>
