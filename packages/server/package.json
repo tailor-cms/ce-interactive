@@ -11,7 +11,7 @@
   "homepage": "https://github.com/tailor-cms/ce-interactive#readme",
   "bugs": "https://github.com/tailor-cms/ce-interactive/issues",
   "type": "module",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "exports": {
     ".": {
       "import": "./dist/index.mjs",

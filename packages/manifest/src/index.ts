@@ -1,10 +1,9 @@
-import { DEFAULT_HEIGHT } from '@tailor-cms/ce-interactive-common';
-
 import type {
   DataInitializer,
   ElementData,
   ElementManifest,
 } from './interfaces';
+import { DEFAULT_HEIGHT } from './frame';
 
 // Element unique id within the target system (e.g. Tailor)
 export const type = 'INTERACTIVE';
@@ -46,3 +45,4 @@ const manifest: ElementManifest = {
 
 export default manifest;
 export * from './interfaces';
+export * from './frame';
