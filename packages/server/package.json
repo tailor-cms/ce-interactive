@@ -11,7 +11,7 @@
   "homepage": "https://github.com/tailor-cms/ce-interactive#readme",
   "bugs": "https://github.com/tailor-cms/ce-interactive/issues",
   "type": "module",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
@@ -30,7 +30,7 @@
     "lint:fix": "pnpm lint --fix",
     "nuke": "pnpm dlx del-cli dist node_modules",
     "nuke:dist": "pnpm dlx del-cli dist",
-    "prepublish": "pnpm build"
+    "prepack": "pnpm build"
   },
   "dependencies": {
     "@tailor-cms/cek-common": "2.1.1"
