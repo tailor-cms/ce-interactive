@@ -23,9 +23,8 @@ export const procedures: Record<string, ProcedureHandler> = {
     const file = await storage.getFile(key);
     if (!file) throw new Error('File not found');
     const html = file.toString('utf8');
-    // Providers take upload options (e.g. S3 metadata) the typed
-    // interface leaves out; keep the page served as HTML.
-    await (storage.saveFile as any)(key, addResizeReporter(html), {
+    // S3-backed hosts don't infer the content type; keep it served as HTML
+    await storage.saveFile(key, addResizeReporter(html), {
       ContentType: 'text/html',
     });
     return { title: readTitle(html) };
