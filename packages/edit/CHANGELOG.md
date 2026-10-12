@@ -1,5 +1,11 @@
 # @tailor-cms/ce-interactive-edit
 
+## 1.0.1
+
+### Patch Changes
+
+- Fix using lib assets.
+
 ## 1.0.0
 
 ### Major Changes

@@ -22,6 +22,7 @@
         :show-actions="isFocused && !isPreparing"
         mode="dropzone"
         @delete="remove"
+        @input="onInput"
         @upload="setPage"
       >
         <div v-if="isPreparing" class="pa-6 text-center">
@@ -106,7 +107,7 @@ const setPage = async ({ key, url, publicUrl }: Record<string, any>) => {
     const { data } = props.element;
     emit('save', {
       ...data,
-      url: publicUrl,
+      url: publicUrl ?? url,
       assets: { url },
       title: data.title || title,
     });
@@ -115,6 +116,17 @@ const setPage = async ({ key, url, publicUrl }: Record<string, any>) => {
   } finally {
     pendingKey.value = '';
   }
+};
+
+// Asset library picks arrive as `input`, uploads as `upload`; clearing emits
+// `input` with null alongside `delete`, which is handled there.
+const onInput = (payload: Record<string, any> | null) => {
+  if (!payload) return;
+  if (!payload.key) {
+    error.value = 'Select an HTML file from the asset library.';
+    return;
+  }
+  return setPage(payload);
 };
 
 const remove = () => {
