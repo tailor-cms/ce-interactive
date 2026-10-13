@@ -1,5 +1,11 @@
 # @tailor-cms/ce-interactive-edit
 
+## 1.0.2
+
+### Patch Changes
+
+- Show the element icon and an "Add an interactive page" title in the upload dropzone.
+
 ## 1.0.1
 
 ### Patch Changes
