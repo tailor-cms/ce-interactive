@@ -18,9 +18,11 @@
       <TailorFileInput
         :allowed-extensions="HTML_EXTENSIONS"
         :file-key="pendingKey || element.data.assets?.url"
+        :icon="manifest.ui.icon"
         :readonly="isReadonly"
         :show-actions="isFocused && !isPreparing"
         mode="dropzone"
+        title="Add an interactive page"
         @delete="remove"
         @input="onInput"
         @upload="setPage"
